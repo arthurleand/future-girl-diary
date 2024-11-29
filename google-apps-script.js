@@ -1,12 +1,31 @@
 // ID da sua planilha do Google Sheets
-const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID';
+const SPREADSHEET_ID = '1kigNpniulKZ6faWjafsv5jvxfihdIn4Xd8M4rZ0uOh8';
 
 // URLs dos seus arquivos (você hospedará no GitHub Pages)
-const SAMPLE_PDF_URL = 'https://seu-usuario.github.io/seu-repositorio/downloads/amostra.pdf';
-const WALLPAPER_URL = 'https://seu-usuario.github.io/seu-repositorio/downloads/wallpaper.jpg';
+const SAMPLE_PDF_URL = 'https://arthurleand.github.io/future-girl-diary/downloads/teste2.png';
+const WALLPAPER_URL = 'https://arthurleand.github.io/future-girl-diary/downloads/teste1.png';
+
+// Função para lidar com CORS
+function doOptions(e) {
+  return ContentService.createTextOutput()
+    .setMimeType(ContentService.MimeType.TEXT)
+    .setHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '3600'
+    });
+}
 
 function doPost(e) {
   try {
+    // Configurar CORS
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    };
+
     // Pegar dados do formulário
     const data = JSON.parse(e.postData.contents);
     const name = data.name;
@@ -26,12 +45,14 @@ function doPost(e) {
     sendWelcomeEmail(name, email);
     
     return ContentService.createTextOutput('Success')
-      .setMimeType(ContentService.MimeType.TEXT);
+      .setMimeType(ContentService.MimeType.TEXT)
+      .setHeaders(headers);
     
   } catch(error) {
     console.error('Error:', error);
     return ContentService.createTextOutput('Error: ' + error.message)
-      .setMimeType(ContentService.MimeType.TEXT);
+      .setMimeType(ContentService.MimeType.TEXT)
+      .setHeaders(headers);
   }
 }
 
